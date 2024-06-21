@@ -1,9 +1,7 @@
 package com.example.demo.aspect;
 
-
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
@@ -11,31 +9,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
-    @Pointcut("execution(* com.example.demo.service.MyService.*(..))")
-    private void myserviceMethods() {}
-    
-    @Pointcut("execution(* com.example.demo.service.MyService2.performTaskB(..))")
-    private void myservice2Methods() {}
-    
+    // Pointcut for all methods in OrderService
+    @Pointcut("execution(* com.example.demo.service.OrderService.*(..))")
+    private void orderServiceMethods() {}
 
-    @Before("myserviceMethods()")
-    public void logBeforeServiceMethods() {
-        System.out.println("Before executing service method");
+    // Pointcut for a specific method in PaymentService
+    @Pointcut("execution(* com.example.demo.service.PaymentService.processPayment(..))")
+    private void paymentServiceProcessPayment() {}
+
+    // Pointcut for all methods in NotificationService
+    @Pointcut("execution(* com.example.demo.service.NotificationService.*(..))")
+    private void notificationServiceMethods() {}
+
+    @Before("orderServiceMethods()")
+    public void logBeforeOrderService() {
+        System.out.println("Before executing OrderService method");
     }
 
+    @Before("paymentServiceProcessPayment()")
+    public void logBeforePaymentService() {
+        System.out.println("Before executing PaymentService processPayment");
+    }
 
-    @Before("myservice2Methods()")
-    public void logBeforeServiceMethods2() {
-        System.out.println("Before executing 2nd service method");
-    }
-    
-    @AfterReturning("myserviceMethods()")
-    public void logAfterServiceMethods() {
-        System.out.println("After executing service method");
-    }
-    
-    @AfterReturning("myservice2Methods()")
-    public void logAfterServiceMethods2() {
-        System.out.println("After executing 2nd service method");
+    @Before("notificationServiceMethods()")
+    public void logBeforeNotificationService() {
+        System.out.println("Before executing NotificationService method");
     }
 }
