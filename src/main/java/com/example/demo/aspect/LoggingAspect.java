@@ -1,38 +1,25 @@
 package com.example.demo.aspect;
 
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+
+import java.util.logging.Logger;
 
 @Aspect
 @Component
 public class LoggingAspect {
 
-    // Pointcut for all methods in OrderService
-    @Pointcut("execution(* com.example.demo.service.OrderService.*(..))")
-    private void orderServiceMethods() {}
+    private Logger logger = Logger.getLogger(getClass().getName());
 
-    // Pointcut for a specific method in PaymentService
-    @Pointcut("execution(* com.example.demo.service.PaymentService.processPayment(..))")
-    private void paymentServiceProcessPayment() {}
-
-    // Pointcut for all methods in NotificationService
-    @Pointcut("execution(* com.example.demo.service.NotificationService.*(..))")
-    private void notificationServiceMethods() {}
-
-    @Before("orderServiceMethods()")
-    public void logBeforeOrderService() {
-        System.out.println("Before executing OrderService method");
+    @Before("execution(* com.example.demo.service.*.*(..))")
+    public void logBefore() {
+        logger.info("Executing method...");
     }
 
-    @Before("paymentServiceProcessPayment()")
-    public void logBeforePaymentService() {
-        System.out.println("Before executing PaymentService processPayment");
-    }
-
-    @Before("notificationServiceMethods()")
-    public void logBeforeNotificationService() {
-        System.out.println("Before executing NotificationService method");
+    @AfterReturning(pointcut = "execution(* com.example.demo.service.*.*(..))", returning = "result")
+    public void logAfterReturning(Object result) {
+        logger.info("Method execution successful. Result: " + result);
     }
 }
