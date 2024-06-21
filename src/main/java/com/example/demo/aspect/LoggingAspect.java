@@ -1,10 +1,7 @@
 package com.example.demo.aspect;
 
-
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -12,30 +9,40 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
 
     @Pointcut("execution(* com.example.demo.service.MyService.*(..))")
-    private void myserviceMethods() {}
-    
-    @Pointcut("execution(* com.example.demo.service.MyService2.performTaskB(..))")
-    private void myservice2Methods() {}
-    
+    private void serviceMethods() {}
 
-    @Before("myserviceMethods()")
-    public void logBeforeServiceMethods() {
+    @Before("serviceMethods()")
+    public void logBefore() {
         System.out.println("Before executing service method");
     }
 
-
-    @Before("myservice2Methods()")
-    public void logBeforeServiceMethods2() {
-        System.out.println("Before executing 2nd service method");
-    }
-    
-    @AfterReturning("myserviceMethods()")
-    public void logAfterServiceMethods() {
+    @After("serviceMethods()")
+    public void logAfter() {
         System.out.println("After executing service method");
     }
-    
-    @AfterReturning("myservice2Methods()")
-    public void logAfterServiceMethods2() {
-        System.out.println("After executing 2nd service method");
+
+    @AfterReturning("serviceMethods()")
+    public void logAfterReturning() {
+        System.out.println("After successfully executing service method");
+    }
+
+    @AfterThrowing("serviceMethods()")
+    public void logAfterThrowing() {
+        System.out.println("After throwing exception in service method");
+    }
+
+    @Around("serviceMethods()")
+    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        System.out.println("Around before executing service method");
+        Object result;
+        try {
+            result = joinPoint.proceed();
+        } catch (Throwable throwable) {
+            System.out.println("Around after throwing exception in service method");
+            throw throwable;
+        }
+        System.out.println("Around after successfully executing service method");
+        return result;
     }
 }
+
