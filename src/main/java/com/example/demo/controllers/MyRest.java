@@ -11,9 +11,16 @@ public class MyRest {
 	@Autowired
 	private MyService myService;
 
-	@GetMapping("/")
+	@GetMapping("/1")
 	public String get() {
-		return myService.doSomething();
+		return myService.performTask1();
 	}
+	
+	@GetMapping("/2")
+	public String get2() {
+		System.out.println("2");
+		return myService.performTask2();
+	}
+	
 	
 }
