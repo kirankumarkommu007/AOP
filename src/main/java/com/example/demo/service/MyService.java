@@ -5,7 +5,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class MyService {
 
-    public String doSomething() {
-        return "Something was done!";
-    }
+
+
+	    public void createUser() {
+	        System.out.println("Before executing createUser");
+	        // Logic to create user
+	        System.out.println("After executing createUser");
+	    }
+
+	    public void deleteUser() {
+	        System.out.println("Before executing deleteUser");
+	        // Logic to delete user
+	        System.out.println("After executing deleteUser");
+	    }
+	
+
 }

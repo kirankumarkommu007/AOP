@@ -12,8 +12,8 @@ public class MyRest {
 	private MyService myService;
 
 	@GetMapping("/")
-	public String get() {
-		return myService.doSomething();
+	public void get() {
+		 myService.createUser();
 	}
 	
 }
