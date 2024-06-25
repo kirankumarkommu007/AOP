@@ -1,8 +1,10 @@
 package com.example.demo.aspect;
 
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;
@@ -11,15 +13,23 @@ import java.util.logging.Logger;
 @Component
 public class LoggingAspect {
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private Logger logger = Logger.getLogger(LoggingAspect.class.getName());
 
-    @Before("execution(* com.example.demo.service.*.*(..))")
-    public void logBefore() {
-        logger.info("Executing method...");
+    @Pointcut("execution(* com.example.demo.service.UserService.*(..))")
+    public void userServiceMethods() {}
+
+    @Before("userServiceMethods()")
+    public void beforeTransaction() {
+        logger.info("Starting transaction");
     }
 
-    @AfterReturning(pointcut = "execution(* com.example.demo.service.*.*(..))", returning = "result")
-    public void logAfterReturning(Object result) {
-        logger.info("Method execution successful. Result: " + result);
+    @After("userServiceMethods()")
+    public void afterTransaction() {
+        logger.info("Committing transaction");
+    }
+
+    @AfterThrowing("userServiceMethods()")
+    public void afterTransactionFailure() {
+        logger.severe("Transaction failed, rolling back");
     }
 }
