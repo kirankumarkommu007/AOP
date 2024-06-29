@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.service.MyService;
+import com.example.demo.service.EaxmpleService;
 
 @RestController
-public class MyRest {
+public class ExampleRestController {
 	@Autowired
-	private MyService myService;
+	private EaxmpleService myService;
 
 	@GetMapping("/")
 	public void get() {
